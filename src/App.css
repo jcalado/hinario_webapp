@@ -1,38 +1,264 @@
-.App {
-  text-align: center;
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap");
+
+.verse {
+  line-break: normal;
+  white-space: pre;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+p {
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.strophe {
   display: flex;
+  overflow: hidden;
   flex-direction: column;
   align-items: center;
+  font-size: 8vh;
+  height: 100vh;
+  width: 100vw;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-content: center;
+  background-size: cover;
+}
+
+.strophe p {
+  z-index: 2;
+  color: white;
+  font-weight: 800;
+  text-transform: uppercase;
+  opacity: 1;
+  transition: all 2s linear;
+}
+
+.strophe::before {
+  content: " ";
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.1);
+  position: absolute;
+  z-index: 1;
+  backdrop-filter: blur(0px);
+}
+
+.strophe[data-visible="false"] {
+  display: none;
+}
+
+.innerStrophe {
+  border: 3px solid white;
+  width: 80%;
+  text-align: center;
+  background: rgb(0 0 0 / 49%);
+  backdrop-filter: blur(5px);
+  padding: 5% 2%;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  height: 100vh;
+  width: 100%;
+  vertical-align: middle;
+  font-family: "Oswald";
+  overflow: hidden;
+}
+
+.hymnTitle {
+  text-align: center;
+  text-transform: uppercase;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-shadow: 1px 4px 2px #00000038,
+               0px 9px 20px #00000038;
+  background-size: cover;
+}
+
+.hymnTitle h1,
+.hymnTitle h2,
+.hymnTitle h3 {
+  margin: 0;
+}
+
+.hymnTitle h1 {
+  font-size: 10vh;
+}
+
+.hymnTitle h2 {
+  font-size: 5vh;
+}
+
+.hymnTitle h3 {
+  margin-top: 2em;
+  font-size: 3vh;
+}
+
+#nav {
+
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: row;
+  gap: 5%;
+  color: white;
+  font-weight: bold;
+  font-size: 3em;
+  cursor: pointer;
+  background-color: black;
+  justify-content: center;
+  width: 100%;
+  user-select: none;
+  padding: 1em 0;
+}
+
+#nav div:hover {
+  background-color: red;
+}
+
+#controlnav {
+  position: fixed;
+  bottom: 2em;
+  z-index: 100;
+  display: flex;
+  flex-direction: row;
+  gap: 2em;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 1em 2em;
+  border-radius: 0.5em;
+  backdrop-filter: blur(10px);
+}
+
+audio {
+  position: fixed;
+  right: calc(50% - 25%);
+  bottom: 11em;
+  z-index: 100;
+  width: 50%;
+}
+
+#controlnav button {
+  appearance: none;
+  border: 0;
+  transition: 0.2s linear all;
+  padding: 0.3em 0.6em;
+  display: flex;
+  cursor: pointer;
+  background: none;
+
+}
+
+#controlnav button svg {
+  width: 5em;
+  height: 5em;
+  stroke:white;
+}
+
+#controlnav button:hover svg {
+ fill: white;
+ stroke: #29712a;
+}
+
+#controlnav button:active {
+  background-color: white;
+}
+
+#server-status, #lyrics-end{
+  width: 100%;
+  text-align: center;
+  padding: 0.5em;
+  font-weight: bold;
+  font-size: 1.5em;
+  position: fixed;
+  top: 0;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+#lyrics-end {
+  color: black;
+  background: red;
+  animation: blink 1s infinite linear;
+  backface-visibility: hidden;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+@keyframes blink {
+  0% {
+    background: red;
   }
-  to {
-    transform: rotate(360deg);
+  50% {
+    background: white;
+  }
+}
+
+#server-status.green {
+  background-color: #29712a;
+  box-shadow: 20px 0px 20px #29712a;
+}
+
+@keyframes blink-status {
+  0% {
+    background: red;
+    color: white;
+  }
+  50% {
+    background: white;
+    color: red;
+  }
+  100% {
+    background: red;
+    color: white;
+  }
+}
+
+#server-status.red {
+  background-color: rgb(255, 159, 159);
+  box-shadow: 20px 0px 20px rgb(255, 159, 159);
+  animation: blink-status 2s infinite linear;
+}
+
+#debug {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  width: 100%;
+  color: white;
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+
+@media screen and (max-device-width:640px) {
+  .strophe {
+    justify-content: center;
+    font-size: 5vh;
+  }
+
+  #controlnav {
+    bottom: 8em;
+    gap: 1em;
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    width: 100%;
+    justify-content: center;
+    padding: 1em;
+  }
+
+  audio {
+    bottom: 2em;
+    width: 94%;
+    right: 3%;
+  }
+
+  #controlnav button svg {
+    width: 5em;
+    height: 5em;
   }
 }
