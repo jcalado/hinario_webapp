@@ -1,19 +1,19 @@
 import hymns from "./assets/songs.json";
 import "./App.css";
 
-import {BackgroundImages} from "./BackgroundImages";
+import { BackgroundImages } from "./BackgroundImages";
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import HymnLyrics from "./HymnLyrics";
 
 import io from 'socket.io-client';
 import { v4 as uuidv4 } from 'uuid';
 
-const socket = io("ws://127.0.0.1:4000");
+const socket = io("wss://hinario-wss.jcalado.com");
 
 function App() {
-  const [activeIndex, setActiveIndex] = React.useState(-1);  
+  const [activeIndex, setActiveIndex] = React.useState(-1);
 
 
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -22,13 +22,14 @@ function App() {
   let params = useParams();
 
   var number = params.hymnNumber ? params.hymnNumber - 1 : 0;
-  const hino = hymns[number];
+  const [hino, setHino] = useState(hymns[number]);
   let result = hino["lyrics"].flatMap(a => a.strophe);
 
   var isDebug = false;
 
+  let navigate = useNavigate();
 
-  function getId(){
+  function getId() {
     if (localStorage.getItem('id') === null || localStorage.getItem('id') === 'null') {
       var id = prompt("Copie ou introduza um ID unico", uuidv4());
       localStorage.setItem('id', id);
@@ -43,7 +44,7 @@ function App() {
 
     socket.on('connect', () => {
       setIsConnected(true);
-      socket.emit('register-client', localStorage.getItem('id'), number)
+      socket.emit('register-client', localStorage.getItem('id'), number, activeIndex)
     });
 
     socket.on('disconnect', () => {
@@ -56,31 +57,30 @@ function App() {
     });
 
     socket.on('client-next', (...args) => {
-      if (args[0] === localStorage.getItem('id')) {
-        setActiveIndex(args[1])
-        console.log(`A definir index ${args[1]}`)
-      }
+      setActiveIndex(args[0])
+      console.log(`A definir index ${args[0]}`)
     });
 
     socket.on('client-previous', (...args) => {
-      if (args[0] === localStorage.getItem('id')) {
-        setActiveIndex(args[1])
-        console.log(`A definir index ${args[1]}`)
-      }
+      setActiveIndex(args[0])
+      console.log(`A definir index ${args[0]}`)
     });
 
-    socket.on('client-number', (...args) => {
-      if (args[0] === localStorage.getItem('id')) {
-        socket.emit('client-answer-number', localStorage.getItem('id'), number)
-        console.log(`A responder ao controlo com id ${args[0]} que estou no numero ${number}`)
-      }
+    socket.on('client-status', (...args) => {
+      socket.emit('client-answer-status', localStorage.getItem('id'), number, activeIndex)
+      console.log(`A responder ao controlo com id ${args[0]} que estou no numero ${number} e no indice ${activeIndex}`)
+    });
+
+    socket.on('client-open', (...args) => {
+      navigate(`/${args[0]}`)
+      setHino(hymns[args[0] - 1])
+      socket.emit('client-answer-status', localStorage.getItem('id'), args[0] - 1, -1)
+      console.log(`A abrir index ${args[1]}`)
     });
 
     socket.on('reset', (...args) => {
-      if (args[0] === localStorage.getItem('id')) {
-        localStorage.removeItem('id')
-        console.log(`A fazer reset...`)
-      }
+      localStorage.removeItem('id')
+      console.log(`A fazer reset...`)
     });
 
 
@@ -90,22 +90,22 @@ function App() {
       socket.off('pong');
       socket.off('client-next');
       socket.off('client-previous');
-      socket.off('client-number');
+      socket.off('client-status');
       socket.off('client-reset');
     };
 
-  }, [isConnected, number, socket]);
+  }, [isConnected, number, hino, navigate, activeIndex]);
 
 
   return (
     <div className="App">
-      <div className="hymnTitle" style={{"display": activeIndex === -1 ? "flex" : "none", backgroundImage: `url(${BackgroundImages[0]})`}}>
+      <div className="hymnTitle" style={{ "display": activeIndex === -1 ? "flex" : "none", backgroundImage: `url(${BackgroundImages[0]})` }}>
         <h1>{hino["hymn"]["title"]}</h1>
         <h2>#{hino["hymn"]["number"]}</h2>
         <h3>{hino["hymn"]["verse"]}</h3>
       </div>
       <HymnLyrics activeIndex={activeIndex} hymn={hino} socket={socket}></HymnLyrics>
-      <div id="debug" style={{"display": isDebug ? 'block' : 'none' }}>
+      <div id="debug" style={{ "display": isDebug ? 'block' : 'none' }}>
         <span>ID: {localStorage.getItem('id')}</span>
       </div>
     </div>

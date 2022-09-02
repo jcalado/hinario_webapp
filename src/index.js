@@ -4,19 +4,20 @@ import './index.css';
 import App from './App';
 import Control from './Control';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-  <BrowserRouter>
-  <Routes>
-    
-      <Route path="/">
-      <Route path=":hymnNumber" element={<App />} />
-      </Route>
-      <Route path="control" element={<Control />} />
-    </Routes>
+    <BrowserRouter>
+      <Routes>
+      
+        <Route path="/hinario_multimedia" element={<App />}>
+          
+          <Route path=":hymnNumber" element={<App />} />
+        </Route>
+        <Route path="/hinario_multimedia/control" element={<Control />} />
+      </Routes>
     </BrowserRouter>
   </React.StrictMode>
 );
@@ -24,4 +25,4 @@ root.render(
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-//reportWebVitals(console.log);
+reportWebVitals(console.log);

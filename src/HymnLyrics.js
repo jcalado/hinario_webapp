@@ -1,19 +1,20 @@
 
 import "./App.css";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {BackgroundImages} from "./BackgroundImages";
 
 
 var backgroundImages = [];
-var lyrics = [];
 var location = 0;
 var processImages = true;
 
 function HymnLyrics(props) {
 
+  const [lyrics, setLyrics] = useState(null)
+
   useEffect(() => {
     location = 0;
-    lyrics = []
+    var holder = []
 
     backgroundImages  = props.backgroundImages || []
     processImages = backgroundImages.length === 0 ? true : false
@@ -31,32 +32,24 @@ function HymnLyrics(props) {
         } else {
           image = backgroundImages[location]
         }
-        lyrics.push(<div className='strophe' style={{ backgroundImage: `url(${image})` }}
+        holder.push(<div className='strophe' style={{ backgroundImage: `url(${image})` }}
         key={location}
         id={location}
+        data-visible={holder.length === props.activeIndex}
         ><div className='innerStrophe'><p>{strophe.strophe[i]}</p><p>{strophe.strophe[i+1]}</p></div></div>)
         i++
-
-        document.querySelectorAll('.strophe').forEach((item, i)=>{
-          if (i === props.activeIndex) {
-            item.dataset.visible = 'true'
-          } else {
-            item.dataset.visible = 'false'
-          }
-        })
       }
-
-      // We have to notify the control page about what images were picked for the backgrounds.
-      if (processImages) {
-        console.log(`Images picked: `)
-        console.log(backgroundImages)
-        props.socket.emit('client-picked-images', localStorage.getItem('id'), backgroundImages)
-      }
-
-
     })
 
-  })
+    setLyrics(holder)
+    // We have to notify the control page about what images were picked for the backgrounds.
+    if (processImages) {
+      // console.log(`Images picked: `)
+      // console.log(backgroundImages)
+      props.socket.emit('client-picked-images', localStorage.getItem('id'), holder)
+    }
+
+  },[props.hymn, props.activeIndex])
 
 
   return (

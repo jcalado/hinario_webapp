@@ -3,7 +3,7 @@ import "./App.css";
 
 import image1 from "./assets/images/david-marcu-78A265wPiO4-unsplash.jpg";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import HymnLyrics from "./HymnLyrics";
 import io from 'socket.io-client';
@@ -11,47 +11,45 @@ import { v4 as uuidv4 } from 'uuid';
 import { IconArrowLeft, IconArrowRight, IconPlug } from "@tabler/icons";
 
 
-const socket = io("ws://127.0.0.1:4000");
+const socket = io("wss://hinario-wss.jcalado.com");
 
 
 function Control() {
   const [activeIndex, setActiveIndex] = React.useState(-1);
 
   let params = useParams();
-  let number = params.hymnNumber ? params.hymnNumber - 1 : 0;
 
   const [isConnected, setIsConnected] = useState(socket.connected);
-  const [lastPong, setLastPong] = useState(null);
+  const [number, setNumber] = useState(params.hymnNumber ? params.hymnNumber - 1 : 0)
   const [hino, setHino] = useState(hymns[number])
   const [backgroundImages, setBackgroundImages] = useState([])
-  let result = hino["lyrics"].flatMap(a => a.strophe);
+  const [result, setResult] = useState(hino["lyrics"].flatMap(a => a.strophe))
 
   useEffect(() => {
-    
+    console.log("Running useEffect")
+    console.log(hino)
+
     socket.on('connect', () => {
       setIsConnected(true);
-      socket.emit('register-control', localStorage.getItem('id'), number)
+      socket.emit('register-control', localStorage.getItem('id'), number, activeIndex)
       console.log('Socket connected')
     });
 
-    socket.on('client-next', (...args) => {
-      console.log('Foi-me pedido para avancar, mas eu sou controlo!')
-      console.log(args);
-    });
+    socket.on('control-status', (...args) => {
+      console.log("control-status");
+      console.log(args)
+        setNumber(args[0]);
+        setHino(hymns[args[0]]);
+        setActiveIndex(args[1]);
+        setResult(hino["lyrics"].flatMap(a => a.strophe))
+        console.log(`A carregar o hino ${args[0]} escolhido pelo apresentador, no indice ${args[1]}`)
 
-    socket.on('control-number', (...args) => {
-      if (args[0] === localStorage.getItem('id')) {
-        setHino(hymns[args[1]])
-        console.log(`A carregar o hino ${args[1]} escolhido pelo apresentador`)
-      }
     });
 
     socket.on('control-images', (...args) => {
-      if (args[0] === localStorage.getItem('id')) {
-        setBackgroundImages(args[1])
-        console.log(`A carregar as imagens escolhido pelo apresentador`)
-        console.log(backgroundImages)
-      }
+        setBackgroundImages(args[0]);
+        // console.log(`A carregar as imagens escolhidas pelo apresentador`)
+        // console.log(backgroundImages)
     });
 
     socket.on('reset', (...args) => {
@@ -64,14 +62,13 @@ function Control() {
 
     return () => {
       socket.off('connect');
-      socket.off('client-next');
-      socket.off('control-number');
+      socket.off('control-status');
       socket.off('control-images');
       socket.off('reset');
     };
 
 
-  }, [isConnected, number, backgroundImages]);
+  }, [hino]);
 
   function getId(){
     if (localStorage.getItem('id') === null) {
@@ -89,8 +86,6 @@ function Control() {
   }
 
   const handleNext = () => {
-    console.log(result)
-
     if (activeIndex < result.length/2 - 1 ) {
       sendMessage('control-next', localStorage.getItem('id'), activeIndex + 1);
       setActiveIndex(activeIndex + 1)
@@ -111,6 +106,11 @@ function Control() {
   }
   const handleReset = () => { 
     sendMessage('reset', localStorage.getItem('id'))
+  }
+
+  const handleShow = (e) => {
+    console.log(e.target.value)
+    sendMessage('control-open', localStorage.getItem('id'), e.target.value)
   }
 
   const audioUrl = `https://storage.googleapis.com/data.cpb.com.br/hinario-adventista/novo/audio/instrumental/${hino.hymn.number.padStart(3,0)}.mp3`;
@@ -137,6 +137,9 @@ function Control() {
         </button>
       </div>
       <HymnLyrics activeIndex={activeIndex} hymn={hino} backgroundImages={backgroundImages} socket={socket}></HymnLyrics>
+      <select id='hymnPicker' onChange={handleShow}>
+        {hymns.map((hymn) => <option value={hymn.hymn.number} key={hymn.hymn.number}>{hymn.hymn.number} - {hymn.hymn.title}</option>)}
+      </select>
     </div>
   );
 }

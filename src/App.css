@@ -101,6 +101,14 @@ p {
   font-size: 3vh;
 }
 
+select#hymnPicker {
+  position: absolute;
+  right: 1rem;
+  bottom: 2em;
+  padding: 1em;
+  z-index: 1000;
+}
+
 #nav {
 
   bottom: 20px;
