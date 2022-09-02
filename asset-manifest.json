@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/hinario_multimedia/static/css/main.8f3fb41a.css",
-    "main.js": "/hinario_multimedia/static/js/main.c248af84.js",
+    "main.js": "/hinario_multimedia/static/js/main.21a1598a.js",
     "static/js/787.dcb9b046.chunk.js": "/hinario_multimedia/static/js/787.dcb9b046.chunk.js",
     "static/media/sebastian-unrau-v4e3JI7DDHI-unsplash.jpg": "/hinario_multimedia/static/media/sebastian-unrau-v4e3JI7DDHI-unsplash.9dca4b1af0763af589e9.jpg",
     "static/media/wil-stewart-pHANr-CpbYM-unsplash.jpg": "/hinario_multimedia/static/media/wil-stewart-pHANr-CpbYM-unsplash.3f0225714f386431502d.jpg",
@@ -23,11 +23,11 @@
     "static/media/david-marcu-78A265wPiO4-unsplash.jpg": "/hinario_multimedia/static/media/david-marcu-78A265wPiO4-unsplash.6e1077173cc994866845.jpg",
     "index.html": "/hinario_multimedia/index.html",
     "main.8f3fb41a.css.map": "/hinario_multimedia/static/css/main.8f3fb41a.css.map",
-    "main.c248af84.js.map": "/hinario_multimedia/static/js/main.c248af84.js.map",
+    "main.21a1598a.js.map": "/hinario_multimedia/static/js/main.21a1598a.js.map",
     "787.dcb9b046.chunk.js.map": "/hinario_multimedia/static/js/787.dcb9b046.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.8f3fb41a.css",
-    "static/js/main.c248af84.js"
+    "static/js/main.21a1598a.js"
   ]
 }
