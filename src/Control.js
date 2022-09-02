@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import HymnLyrics from "./HymnLyrics";
 import io from 'socket.io-client';
 import { v4 as uuidv4 } from 'uuid';
-import { IconArrowLeft, IconArrowRight, IconPlug } from "@tabler/icons";
+import { IconArrowBarToLeft, IconArrowLeft, IconArrowRight, IconPlug } from "@tabler/icons";
 
 
 const socket = io("wss://hinario-wss.jcalado.com");
@@ -24,6 +24,7 @@ function Control() {
   const [hino, setHino] = useState(hymns[number])
   const [backgroundImages, setBackgroundImages] = useState([])
   const [result, setResult] = useState(hino["lyrics"].flatMap(a => a.strophe))
+  const totalSlides = Math.round(result.length%2 === 0 ? result.length/2 - 1 : result.length/2 + 2)
 
   useEffect(() => {
     console.log("Running useEffect")
@@ -86,7 +87,8 @@ function Control() {
   }
 
   const handleNext = () => {
-    if (activeIndex < result.length/2 - 1 ) {
+    
+    if (activeIndex < totalSlides-2) {
       sendMessage('control-next', localStorage.getItem('id'), activeIndex + 1);
       setActiveIndex(activeIndex + 1)
     } else {
@@ -95,7 +97,6 @@ function Control() {
 
   }
   const handlePrevious = () => {
-    
     if (activeIndex > -1) {
       sendMessage('control-previous', localStorage.getItem('id'), activeIndex - 1);
       setActiveIndex(activeIndex - 1)
@@ -104,6 +105,11 @@ function Control() {
       setActiveIndex(-1)
     }
   }
+
+  const handleRestart = () => {
+    sendMessage('control-open', localStorage.getItem('id'), hino["hymn"]["number"])
+  }
+
   const handleReset = () => { 
     sendMessage('reset', localStorage.getItem('id'))
   }
@@ -126,10 +132,16 @@ function Control() {
         <h2>{hino["hymn"]["verse"]}</h2>
       </div>
       <div id="controlnav">
+        <button onClick={handleRestart} title='Reiniciar'>
+          <IconArrowBarToLeft></IconArrowBarToLeft>
+        </button>
         <button onClick={handlePrevious}>
           <IconArrowLeft></IconArrowLeft>
         </button>
-        <button onClick={handleNext} style={{"opacity": activeIndex >= result.length/2 - 1 ? "0" : "1"}}>
+        <span id="slidePosition">
+          {activeIndex+2} / {totalSlides}
+        </span>
+        <button onClick={handleNext} style={{"opacity": totalSlides-2 === activeIndex ? "0" : "1"}}>
           <IconArrowRight></IconArrowRight>
         </button>
         <button id="reset" onClick={handleReset} title='Reset'>

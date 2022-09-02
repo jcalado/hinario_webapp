@@ -64,8 +64,9 @@ function App() {
     });
 
     socket.on('client-open', (...args) => {
-      navigate(`/${args[0]}`)
+      navigate(`/hinario_multimedia/${args[0]}`)
       setHino(hymns[args[0] - 1])
+      setActiveIndex(-1)
       socket.emit('client-answer-status', localStorage.getItem('id'), args[0] - 1, -1)
       console.log(`A abrir index ${args[1]}`)
     });

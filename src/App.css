@@ -242,6 +242,14 @@ audio {
   left: 0;
 }
 
+span#slidePosition {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 2rem;
+}
 
 @media screen and (max-device-width:640px) {
   .strophe {

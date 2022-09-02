@@ -3,34 +3,28 @@ import "./App.css";
 import React, { useEffect, useState } from "react";
 import {BackgroundImages} from "./BackgroundImages";
 
-
-var backgroundImages = [];
+var images = [];
 var location = 0;
 var processImages = true;
 
 function HymnLyrics(props) {
 
-  const [lyrics, setLyrics] = useState(null)
+  const [lyrics, setLyrics] = useState([])
 
   useEffect(() => {
     location = 0;
     var holder = []
-
-    backgroundImages  = props.backgroundImages || []
-    processImages = backgroundImages.length === 0 ? true : false
     var image = ''
+    images = []
 
     props.hymn["lyrics"].forEach((strophe, is) => {
-
-      // console.log(strophe)
-
       for (let i = 0; i < strophe.strophe.length; i++) {
         location = location +1 ;
         if (processImages) {
-          backgroundImages.push(BackgroundImages[Math.floor(Math.random() * BackgroundImages.length)]);
-          image = backgroundImages[backgroundImages.length - 1]
+          images.push(BackgroundImages[Math.floor(Math.random() * BackgroundImages.length)]);
+          image = images[images.length - 1]
         } else {
-          image = backgroundImages[location]
+          image = images[location]
         }
         holder.push(<div className='strophe' style={{ backgroundImage: `url(${image})` }}
         key={location}
@@ -41,6 +35,15 @@ function HymnLyrics(props) {
       }
     })
 
+    // Preload images
+
+    images.forEach((image) => {
+      const img = new Image();
+      img.src = image;
+      console.log(img)
+    });
+
+    // setBackgroundImages(images)
     setLyrics(holder)
     // We have to notify the control page about what images were picked for the backgrounds.
     if (processImages) {
@@ -49,7 +52,7 @@ function HymnLyrics(props) {
       props.socket.emit('client-picked-images', localStorage.getItem('id'), holder)
     }
 
-  },[props.hymn, props.activeIndex, props.backgroundImages, props.socket])
+  },[props.hymn, props.activeIndex, props.socket])
 
 
   return (
