@@ -40,7 +40,7 @@ function HymnLyrics(props) {
     images.forEach((image) => {
       const img = new Image();
       img.src = image;
-      console.log(img)
+      // console.log(img)
     });
 
     // setBackgroundImages(images)
