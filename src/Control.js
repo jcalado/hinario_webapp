@@ -68,7 +68,7 @@ function Control() {
     };
 
 
-  }, [hino]);
+  }, [hino, activeIndex, number]);
 
   function getId(){
     if (localStorage.getItem('id') === null) {

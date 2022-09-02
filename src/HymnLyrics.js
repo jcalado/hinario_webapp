@@ -49,7 +49,7 @@ function HymnLyrics(props) {
       props.socket.emit('client-picked-images', localStorage.getItem('id'), holder)
     }
 
-  },[props.hymn, props.activeIndex])
+  },[props.hymn, props.activeIndex, props.backgroundImages, props.socket])
 
 
   return (

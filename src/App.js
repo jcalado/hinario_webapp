@@ -13,25 +13,22 @@ import { v4 as uuidv4 } from 'uuid';
 const socket = io("wss://hinario-wss.jcalado.com");
 
 function App() {
-  const [activeIndex, setActiveIndex] = React.useState(-1);
-
-
-  const [isConnected, setIsConnected] = useState(socket.connected);
-  const [lastPong, setLastPong] = useState(null);
-
   let params = useParams();
+  let number = params.hymnNumber ? params.hymnNumber - 1 : 0;
 
-  var number = params.hymnNumber ? params.hymnNumber - 1 : 0;
+  const [activeIndex, setActiveIndex] = React.useState(-1);
+  const [isConnected, setIsConnected] = useState(socket.connected);
   const [hino, setHino] = useState(hymns[number]);
-  let result = hino["lyrics"].flatMap(a => a.strophe);
 
-  var isDebug = false;
+
+
+  let isDebug = false;
 
   let navigate = useNavigate();
 
   function getId() {
     if (localStorage.getItem('id') === null || localStorage.getItem('id') === 'null') {
-      var id = prompt("Copie ou introduza um ID unico", uuidv4());
+      let id = prompt("Copie ou introduza um ID unico", uuidv4());
       localStorage.setItem('id', id);
     } else {
       console.log(localStorage.getItem('id'))
@@ -49,11 +46,6 @@ function App() {
 
     socket.on('disconnect', () => {
       setIsConnected(false);
-    });
-
-    socket.on('pong', () => {
-      setLastPong(new Date().toISOString());
-      console.log('pong')
     });
 
     socket.on('client-next', (...args) => {
@@ -87,7 +79,6 @@ function App() {
     return () => {
       socket.off('connect');
       socket.off('disconnect');
-      socket.off('pong');
       socket.off('client-next');
       socket.off('client-previous');
       socket.off('client-status');
