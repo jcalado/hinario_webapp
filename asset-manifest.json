@@ -1,0 +1,33 @@
+{
+  "files": {
+    "main.css": "/hinario_multimedia/static/css/main.3e4ef99f.css",
+    "main.js": "/hinario_multimedia/static/js/main.d1fc44c2.js",
+    "static/js/787.dcb9b046.chunk.js": "/hinario_multimedia/static/js/787.dcb9b046.chunk.js",
+    "static/media/sebastian-unrau-v4e3JI7DDHI-unsplash.jpg": "/hinario_multimedia/static/media/sebastian-unrau-v4e3JI7DDHI-unsplash.9dca4b1af0763af589e9.jpg",
+    "static/media/wil-stewart-pHANr-CpbYM-unsplash.jpg": "/hinario_multimedia/static/media/wil-stewart-pHANr-CpbYM-unsplash.3f0225714f386431502d.jpg",
+    "static/media/v2osk-1Z2niiBPg5A-unsplash.jpg": "/hinario_multimedia/static/media/v2osk-1Z2niiBPg5A-unsplash.c22d6ef8eac21c1807d4.jpg",
+    "static/media/hendrik-cornelissen--qrcOR33ErA-unsplash.jpg": "/hinario_multimedia/static/media/hendrik-cornelissen--qrcOR33ErA-unsplash.a6b4044c70d0b0d4e246.jpg",
+    "static/media/leonard-cotte-c1Jp-fo53U8-unsplash.jpg": "/hinario_multimedia/static/media/leonard-cotte-c1Jp-fo53U8-unsplash.a19c5678ef58490da004.jpg",
+    "static/media/sabeer-darr-Upz-tnx2v2s-unsplash.jpg": "/hinario_multimedia/static/media/sabeer-darr-Upz-tnx2v2s-unsplash.d6ba79e87b4ae72b387e.jpg",
+    "static/media/fabian-quintero-UWQP2mh5YJI-unsplash.jpg": "/hinario_multimedia/static/media/fabian-quintero-UWQP2mh5YJI-unsplash.2121c6d616d3c00fa1fc.jpg",
+    "static/media/federico-respini-sYffw0LNr7s-unsplash.jpg": "/hinario_multimedia/static/media/federico-respini-sYffw0LNr7s-unsplash.4e9ce84c18635040913c.jpg",
+    "static/media/luca-bravo-VowIFDxogG4-unsplash.jpg": "/hinario_multimedia/static/media/luca-bravo-VowIFDxogG4-unsplash.df7c8347a6c29ec26250.jpg",
+    "static/media/vincent-van-zalinge-vUNQaTtZeOo-unsplash.jpg": "/hinario_multimedia/static/media/vincent-van-zalinge-vUNQaTtZeOo-unsplash.cd3bcc774602282c7baf.jpg",
+    "static/media/aaron-burden-GVnUVP8cs1o-unsplash.jpg": "/hinario_multimedia/static/media/aaron-burden-GVnUVP8cs1o-unsplash.d2b857bc73bc81ffc1df.jpg",
+    "static/media/kalen-emsley-_LuLiJc1cdo-unsplash.jpg": "/hinario_multimedia/static/media/kalen-emsley-_LuLiJc1cdo-unsplash.b367e37334a0b3f0e991.jpg",
+    "static/media/willian-justen-de-vasconcellos-T_Qe4QlMIvQ-unsplash.jpg": "/hinario_multimedia/static/media/willian-justen-de-vasconcellos-T_Qe4QlMIvQ-unsplash.55efb9776634d0d95de5.jpg",
+    "static/media/lukasz-szmigiel-jFCViYFYcus-unsplash.jpg": "/hinario_multimedia/static/media/lukasz-szmigiel-jFCViYFYcus-unsplash.0fbdd6a3cda3bd34ede7.jpg",
+    "static/media/sean-oulashin-KMn4VEeEPR8-unsplash.jpg": "/hinario_multimedia/static/media/sean-oulashin-KMn4VEeEPR8-unsplash.3349d0576eb36ce892f6.jpg",
+    "static/media/andreas-gucklhorn-mawU2PoJWfU-unsplash.jpg": "/hinario_multimedia/static/media/andreas-gucklhorn-mawU2PoJWfU-unsplash.27189d87102da1b24ea9.jpg",
+    "static/media/qingbao-meng-01_igFr7hd4-unsplash.jpg": "/hinario_multimedia/static/media/qingbao-meng-01_igFr7hd4-unsplash.d7ad1e6f58fedb261460.jpg",
+    "static/media/david-marcu-78A265wPiO4-unsplash.jpg": "/hinario_multimedia/static/media/david-marcu-78A265wPiO4-unsplash.6e1077173cc994866845.jpg",
+    "index.html": "/hinario_multimedia/index.html",
+    "main.3e4ef99f.css.map": "/hinario_multimedia/static/css/main.3e4ef99f.css.map",
+    "main.d1fc44c2.js.map": "/hinario_multimedia/static/js/main.d1fc44c2.js.map",
+    "787.dcb9b046.chunk.js.map": "/hinario_multimedia/static/js/787.dcb9b046.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3e4ef99f.css",
+    "static/js/main.d1fc44c2.js"
+  ]
+}
