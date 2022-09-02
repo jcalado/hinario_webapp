@@ -2,7 +2,7 @@
   "name": "hinario_letras",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://jcalado.github.io/hinario_multimedia",
+  "homepage": "https://jcalado.com/hinario_multimedia",
   "dependencies": {
     "@tabler/icons": "^1.84.0",
     "@testing-library/jest-dom": "^5.16.5",
