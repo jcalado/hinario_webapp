@@ -13,10 +13,9 @@ root.render(
       <Routes>
       
         <Route path="/hinario_multimedia" element={<App />}>
-          
-          <Route path=":hymnNumber" element={<App />} />
+          <Route path=":hymnNumber/:room" element={<App />} />
         </Route>
-        <Route path="/hinario_multimedia/control" element={<Control />} />
+        <Route path="/hinario_multimedia/control/:room" element={<Control />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

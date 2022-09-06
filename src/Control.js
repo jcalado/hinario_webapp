@@ -6,22 +6,24 @@ import image1 from "./assets/images/david-marcu-78A265wPiO4-unsplash.jpg";
 import React, { useEffect, useState } from "react";
 import HymnLyrics from "./HymnLyrics";
 import io from 'socket.io-client';
-import { v4 as uuidv4 } from 'uuid';
+
 import { IconArrowBarToLeft, IconArrowLeft, IconArrowRight, IconPlug } from "@tabler/icons";
+import { useParams } from "react-router-dom";
 
 
 const socket = io("wss://hinario-wss.jcalado.com");
 
 
 function Control() {
-  // const [activeIndex, setActiveIndex] = React.useState(-1);
+  let params = useParams();
 
   const [state, setState] = useState({
     number: 0,
     hino: hymns[0],
     result: hymns[0]["lyrics"].flatMap(a => a.strophe),
     totalSlides: calculateTotalSlides(hymns[0]["lyrics"].flatMap(a => a.strophe)),
-    activeIndex: -1
+    activeIndex: -1,
+    room: params.room
   })
 
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -32,7 +34,7 @@ function Control() {
 
     socket.on('connect', () => {
       setIsConnected(true);
-      socket.emit('register-control', localStorage.getItem('id'), state.number, state.activeIndex)
+      socket.emit('register-control', state.room, state.number, state.activeIndex)
       console.log('Socket connected')
     });
 
@@ -56,11 +58,9 @@ function Control() {
     });
 
     socket.on('reset', (...args) => {
-      if (args[0] === localStorage.getItem('id')) {
-        localStorage.removeItem('id')
-        console.log(`A fazer reset...`)
-        getId()
-      }
+        // localStorage.removeItem('id')
+        // console.log(`A fazer reset...`)
+        // getId()
     });
 
     return () => {
@@ -74,15 +74,6 @@ function Control() {
   }, [state]);
 
 
-  function getId(){
-    if (localStorage.getItem('id') === null) {
-      var id = prompt("Copie ou introduza um ID unico", uuidv4());
-      localStorage.setItem('id', id);
-    } else {
-      console.log(localStorage.getItem('id'))
-    }
-  }
-
   function calculateTotalSlides(lyrics){
     return Math.round(lyrics.length%2 === 0 ? lyrics.length/2+1 : Math.round(lyrics.length/2+2))
   }
@@ -95,7 +86,7 @@ function Control() {
   const handleNext = () => {
     
     if (state.activeIndex < state.totalSlides-2) {
-      sendMessage('control-next', localStorage.getItem('id'), state.activeIndex + 1);
+      sendMessage('control-next', state.room, state.activeIndex + 1);
       // setActiveIndex(state.activeIndex + 1)
       setState(previousState => ({ ...previousState, activeIndex: state.activeIndex + 1 }))
     } else {
@@ -105,26 +96,26 @@ function Control() {
   }
   const handlePrevious = () => {
     if (state.activeIndex > -1) {
-      sendMessage('control-previous', localStorage.getItem('id'), state.activeIndex - 1);
+      sendMessage('control-previous', state.room, state.activeIndex - 1);
       // setActiveIndex(activeIndex - 1)
       setState(previousState => ({ ...previousState, activeIndex: state.activeIndex-1 }))
     } else {
-      sendMessage('control-previous', localStorage.getItem('id'), -1);
+      sendMessage('control-previous', state.room, -1);
       setState(previousState => ({ ...previousState, activeIndex: -1 }))
     }
   }
 
   const handleRestart = () => {
-    sendMessage('control-open', localStorage.getItem('id'), state.hino["hymn"]["number"])
+    sendMessage('control-open', state.room, state.hino["hymn"]["number"])
   }
 
   const handleReset = () => { 
-    sendMessage('reset', localStorage.getItem('id'))
+    sendMessage('reset', state.room)
   }
 
   const handleShow = (e) => {
     console.log(e.target.value)
-    sendMessage('control-open', localStorage.getItem('id'), e.target.value)
+    sendMessage('control-open', state.room, e.target.value)
   }
 
   const audioUrl = `https://storage.googleapis.com/data.cpb.com.br/hinario-adventista/novo/audio/instrumental/${state.hino.hymn.number.padStart(3,0)}.mp3`;
@@ -132,7 +123,7 @@ function Control() {
   return (
     <div className="App" style={{ "position": "relative" }}>
       <audio id="audio" controls preload="none" src={audioUrl}></audio>
-      <span id="server-status" style={{"display": state.activeIndex === -1 ? "block" : "none"}} className={isConnected ? 'green' : 'red blink'}>{ isConnected ? `Ligado à sala: ${localStorage.getItem('id')}` : 'A ligar ao servidor...' }</span>
+      <span id="server-status" style={{"display": state.activeIndex === -1 ? "block" : "none"}} className={isConnected ? 'green' : 'red blink'}>{ isConnected ? `Ligado à sala: ${state.room}` : 'A ligar ao servidor...' }</span>
       <span id="lyrics-end" style={{"display": state.activeIndex+2 >= state.totalSlides ? "block" : "none"}}>FIM DA LETRA</span>
       
       <div className="hymnTitle" style={{ "display": state.activeIndex === -1 ? "flex" : "none", backgroundImage: `url(${image1})` }}>

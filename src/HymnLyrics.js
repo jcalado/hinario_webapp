@@ -2,6 +2,7 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
 import {BackgroundImages} from "./BackgroundImages";
+import { useParams } from "react-router-dom";
 
 var images = [];
 var location = 0;
@@ -10,6 +11,8 @@ var processImages = true;
 function HymnLyrics(props) {
 
   const [lyrics, setLyrics] = useState([])
+  let params = useParams();
+  let room = params.room
 
   useEffect(() => {
     location = 0;
@@ -49,10 +52,10 @@ function HymnLyrics(props) {
     if (processImages) {
       // console.log(`Images picked: `)
       // console.log(backgroundImages)
-      props.socket.emit('client-picked-images', localStorage.getItem('id'), holder)
+      props.socket.emit('client-picked-images', room, holder)
     }
 
-  },[props.hymn, props.activeIndex, props.socket])
+  },[props.hymn, props.activeIndex, props.socket, room])
 
 
   return (

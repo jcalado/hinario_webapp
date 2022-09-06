@@ -8,13 +8,13 @@ import { useParams, useNavigate } from "react-router-dom";
 import HymnLyrics from "./HymnLyrics";
 
 import io from 'socket.io-client';
-import { v4 as uuidv4 } from 'uuid';
 
 const socket = io("wss://hinario-wss.jcalado.com");
 
 function App() {
   let params = useParams();
   let number = params.hymnNumber ? params.hymnNumber - 1 : 0;
+  let room = params.room
 
   const [activeIndex, setActiveIndex] = React.useState(-1);
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -26,22 +26,13 @@ function App() {
 
   let navigate = useNavigate();
 
-  function getId() {
-    if (localStorage.getItem('id') === null || localStorage.getItem('id') === 'null') {
-      let id = prompt("Copie ou introduza um ID unico", uuidv4());
-      localStorage.setItem('id', id);
-    } else {
-      console.log(localStorage.getItem('id'))
-    }
-  }
-
   useEffect(() => {
     socket.removeAllListeners();
-    getId()
+    // getId()
 
     socket.on('connect', () => {
       setIsConnected(true);
-      socket.emit('register-client', localStorage.getItem('id'), number, activeIndex)
+      socket.emit('register-client', room, number, activeIndex)
     });
 
     socket.on('disconnect', () => {
@@ -59,20 +50,20 @@ function App() {
     });
 
     socket.on('client-status', (...args) => {
-      socket.emit('client-answer-status', localStorage.getItem('id'), number, activeIndex)
+      socket.emit('client-answer-status', room, number, activeIndex)
       console.log(`A responder ao controlo com id ${args[0]} que estou no numero ${number} e no indice ${activeIndex}`)
     });
 
     socket.on('client-open', (...args) => {
-      navigate(`/hinario_multimedia/${args[0]}`)
+      navigate(`/hinario_multimedia/${args[0]}/${args[1]}`)
       setHino(hymns[args[0] - 1])
       setActiveIndex(-1)
-      socket.emit('client-answer-status', localStorage.getItem('id'), args[0] - 1, -1)
+      socket.emit('client-answer-status', room, args[0] - 1, -1)
       console.log(`A abrir index ${args[1]}`)
     });
 
     socket.on('reset', (...args) => {
-      localStorage.removeItem('id')
+      // localStorage.removeItem('id')
       console.log(`A fazer reset...`)
     });
 
@@ -86,7 +77,7 @@ function App() {
       socket.off('client-reset');
     };
 
-  }, [isConnected, number, hino, navigate, activeIndex]);
+  }, [isConnected, number, hino, navigate, activeIndex, room]);
 
 
   return (
@@ -98,7 +89,7 @@ function App() {
       </div>
       <HymnLyrics activeIndex={activeIndex} hymn={hino} socket={socket}></HymnLyrics>
       <div id="debug" style={{ "display": isDebug ? 'block' : 'none' }}>
-        <span>ID: {localStorage.getItem('id')}</span>
+        <span>ID: {room}</span>
       </div>
     </div>
   );
